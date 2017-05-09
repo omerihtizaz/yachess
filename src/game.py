@@ -8,21 +8,21 @@ import player
 class Game:
     def __init__(self):
         self.board = board.Board()
-        self.player_is_white = choice([True, False])
+        self.is_player_white = choice([True, False])
 
     def start(self):
-        if self.player_is_white:
+        if self.is_player_white:
             print("\nYou play as white.\n")
         else:
             print("\nYou play as black.\n")
 
         self.board.print()
 
-        if not self.player_is_white:
-            computer.Computer(self.board).move()
+        if not self.is_player_white:
+            computer.Computer(self.board, self.is_player_white).move()
 
         while True:
             player.Player(self.board).move()
-            computer.Computer(self.board).move()
+            computer.Computer(self.board, self.is_player_white).move()
 
 Game().start()
