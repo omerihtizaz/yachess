@@ -1,39 +1,28 @@
 from random import choice
-from time import sleep
 
 import board
+import computer
+import player
 
 
 class Game:
     def __init__(self):
         self.board = board.Board()
-        self.player_white = choice([True, False])
-
-    def __player_move__(self):
-        while True:
-            move = input("\nIt's your move. ")
-
-            try:
-                self.board.push_san(move)
-            except ValueError:
-                print("Wrong move, try again.")
-            else:
-                break
-
-        print()
-        self.board.print()
+        self.player_is_white = choice([True, False])
 
     def start(self):
-        if self.player_white:
-            print("You play as white.\n")
+        if self.player_is_white:
+            print("\nYou play as white.\n")
         else:
-            print("You play as black.\n")
+            print("\nYou play as black.\n")
 
         self.board.print()
 
-        if not self.player_white:
-            self.board.computer_move()
+        if not self.player_is_white:
+            computer.Computer(self.board).move()
 
         while True:
-            self.__player_move__()
-            self.board.computer_move()
+            player.Player(self.board).move()
+            computer.Computer(self.board).move()
+
+Game().start()
