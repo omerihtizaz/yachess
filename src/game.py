@@ -36,5 +36,4 @@ class Game:
 
         while True:
             self.__player_move__()
-            sleep(5)
             self.board.computer_move()
