@@ -32,7 +32,7 @@ class Board:
             if piece is not None:
                 score += piece_value(piece, square)
 
-        return score / 100
+        return score
 
 def piece_value(piece, square):
     symbol = piece.symbol()
@@ -40,17 +40,17 @@ def piece_value(piece, square):
     score = 1
 
     if symbol.lower() == 'p':
-        score = 1 * pawn_value(square, is_white)
+        score = 10 + (pawn_value(square, is_white) / 10)
     elif symbol.lower() == 'n':
-        score = 3 * knight_value(square, is_white)
+        score = 30 + (knight_value(square, is_white) / 10)
     elif symbol.lower() == 'b':
-        score = 3 * bishop_value(square, is_white)
+        score = 30 + (bishop_value(square, is_white) / 10)
     elif symbol.lower() == 'r':
-        score = 5 * rook_value(square, is_white)
+        score = 50 + (rook_value(square, is_white) / 10)
     elif symbol.lower() == 'q':
-        score = 9 * queen_value(square, is_white)
+        score = 90 + (queen_value(square, is_white) / 10)
     elif symbol.lower() == 'k':
-        score = 100 * king_value(square, is_white)
+        score = 100 + (king_value(square, is_white) / 10)
 
     if symbol.islower():
         score *= -1
@@ -61,7 +61,7 @@ def pawn_value(square, is_white):
     white = [
         0, 0, 0, 0, 0, 0, 0, 0,
         5, 10, 10, -20, -20, 10, 10, 5,
-        5, -5, -10, 10, 0, -10, -5, 5,
+        5, -5, -10, 0, 0, -10, -5, 5,
         0, 0, 0, 20, 20, 0, 0, 0,
         5, 5, 10, 25, 25, 10, 5, 5,
         10, 10, 20, 30, 30, 20, 10, 10,
@@ -117,7 +117,7 @@ def bishop_value(square, is_white):
         -10, 5, 0, 0, 0, 0, 5, -10,
         -10, 10, 10, 10, 10, 10, 10, -10,
         -10, 0, 10, 10, 10, 10, 0, -10,
-        10, 5, 5, 10, 10, 5, 5, -10,
+        -10, 5, 5, 10, 10, 5, 5, -10,
         -10, 0, 5, 10, 10, 5, 0, -10,
         -10, 0, 0, 0, 0, 0, 0, -10,
         -20, -10, -10, -10, -10, -10, -10, -20
@@ -126,7 +126,7 @@ def bishop_value(square, is_white):
     black = [
         -20, -10, -10, -10, -10, -10, -10, -20,
         -10, 0, 0, 0, 0, 0, 0, -10,
-        10, 0, 5, 10, 10, 5, 0, -10,
+        -10, 0, 5, 10, 10, 5, 0, -10,
         -10, 5, 5, 10, 10, 5, 5, -10,
         -10, 0, 10, 10, 10, 10, 0, -10,
         -10, 10, 10, 10, 10, 10, 10, -10,
@@ -156,7 +156,7 @@ def rook_value(square, is_white):
         -5, 0, 0, 0, 0, 0, 0, -5,
         -5, 0, 0, 0, 0, 0, 0, -5,
         -5, 0, 0, 0, 0, 0, 0, -5,
-        5, 0, 0, 0, 0, 0, 0, -5,
+        -5, 0, 0, 0, 0, 0, 0, -5,
         -5, 0, 0, 0, 0, 0, 0, -5,
         0, 0, 0, 5, 5, 0, 0, 0
     ]
@@ -168,13 +168,13 @@ def rook_value(square, is_white):
 def queen_value(square, is_white):
     white = [
         -20, -10, -10, -5, -5, -10, -10, -20,
-        -10, 0, 5, 0, 0, 0, 0, -10, -10,
-        5, 5, 5, 5, 5, 0, -10, 0,
-        0, 5, 5, 5, 5, 0, -5, -5,
-        0, 5, 5, 5, 5, 0, -5, -10,
-        0, 5, 5, 5, 5, 0, -10, -10,
-        0, 0, 0, 0, 0, 0, -10, -20,
-        -10, -10, -5, -5, -10, -10, -20
+        -10, 0, 5, 0, 0, 0, 0, -10,
+        -10, 5, 5, 5, 5, 5, 0, -10,
+        0, 0, 5, 5, 5, 5, 0, -5,
+        -5, 0, 5, 5, 5, 5, 0, -5,
+        10, 0, 5, 5, 5, 5, 0, -10,
+        -10, 0, 0, 0, 0, 0, 0, -10,
+        -20, -10, -10, -5, -5, -10, -10, -20,
     ]
 
     black = [
