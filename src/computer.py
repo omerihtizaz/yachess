@@ -45,12 +45,12 @@ class Computer:
             self.board.push(move)
 
             if is_maximising_white:
-                best_score = max(best_score, self.minimax(depth - 1, False,
-                                                          alpha, beta))
+                best_score = max(best_score,
+                                 self.minimax(depth - 1, False, alpha, beta))
                 alpha = max(alpha, best_score)
             else:
-                best_score = min(best_score, self.minimax(depth - 1, True,
-                                                          alpha, beta))
+                best_score = min(best_score,
+                                 self.minimax(depth - 1, True, alpha, beta))
                 beta = min(beta, best_score)
 
             self.board.pop()

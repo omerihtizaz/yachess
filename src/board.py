@@ -34,6 +34,7 @@ class Board:
 
         return score
 
+
 def piece_value(piece, square):
     symbol = piece.symbol()
     is_white = not symbol.islower()

@@ -25,4 +25,5 @@ class Game:
             player.Player(self.board).move()
             computer.Computer(self.board, self.is_player_white).move()
 
+
 Game().start()
