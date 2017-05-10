@@ -1,6 +1,3 @@
-from random import randint
-
-
 class Computer:
     def __init__(self, board, is_player_white):
         self.board = board
@@ -45,11 +42,11 @@ class Computer:
             self.board.push(move)
 
             if is_maximising_white:
-                best_score = max(best_score, self.minimax(depth - 1, False, 
+                best_score = max(best_score, self.minimax(depth - 1, False,
                                                           alpha, beta))
                 alpha = max(alpha, best_score)
             else:
-                best_score = min(best_score, self.minimax(depth - 1, True, 
+                best_score = min(best_score, self.minimax(depth - 1, True,
                                                           alpha, beta))
                 beta = min(beta, best_score)
 
