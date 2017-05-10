@@ -40,17 +40,17 @@ def piece_value(piece, square):
     score = 1
 
     if symbol.lower() == 'p':
-        score = 10 + (pawn_value(square, is_white) / 10)
+        score = 100 + (pawn_value(square, is_white))
     elif symbol.lower() == 'n':
-        score = 30 + (knight_value(square, is_white) / 10)
+        score = 300 + (knight_value(square, is_white))
     elif symbol.lower() == 'b':
-        score = 30 + (bishop_value(square, is_white) / 10)
+        score = 325 + (bishop_value(square, is_white))
     elif symbol.lower() == 'r':
-        score = 50 + (rook_value(square, is_white) / 10)
+        score = 500 + (rook_value(square, is_white))
     elif symbol.lower() == 'q':
-        score = 90 + (queen_value(square, is_white) / 10)
+        score = 975 + (queen_value(square, is_white))
     elif symbol.lower() == 'k':
-        score = 100 + (king_value(square, is_white) / 10)
+        score = 1000000 + (king_value(square, is_white))
 
     if symbol.islower():
         score *= -1

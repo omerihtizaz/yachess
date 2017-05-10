@@ -6,13 +6,13 @@ class Computer:
     def move(self):
         print("\nComputer is thinking...\n")
 
-        global_score = -1000 if self.is_white else 1000
+        global_score = -1e8 if self.is_white else 1e8
         chosen_move = None
 
         for move in self.board.legal_moves():
             self.board.push(move)
 
-            local_score = self.minimax(3, self.is_white, -1000, 1000)
+            local_score = self.minimax(3, self.is_white, -1e8, 1e8)
 
             if self.is_white and local_score > global_score:
                 global_score = local_score
@@ -36,7 +36,10 @@ class Computer:
         if depth == 0:
             return self.board.evaluate_board()
 
-        best_score = -1000 if is_maximising_white else 1000
+        if not self.board.legal_moves():
+            return 1e8 if is_maximising_white else -1e8
+
+        best_score = -1e8 if is_maximising_white else 1e8
 
         for move in self.board.legal_moves():
             self.board.push(move)
