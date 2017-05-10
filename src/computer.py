@@ -26,7 +26,12 @@ class Computer:
                 global_score = local_score
                 chosen_move = move
 
+            print(local_score, move)
             self.board.pop()
+
+        print()
+        print(global_score, chosen_move)
+        print()
 
         self.board.push(chosen_move)
         self.board.print()
@@ -51,7 +56,7 @@ class Computer:
 
             self.board.pop()
 
-            if (beta <= alpha):
+            if beta <= alpha:
                 break
 
         return best_score

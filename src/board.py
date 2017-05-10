@@ -32,7 +32,7 @@ class Board:
             if piece is not None:
                 score += self.piece_value(piece, square)
 
-        return score
+        return score / 100
 
     def piece_value(self, piece, square):
         symbol = piece.symbol()
@@ -79,7 +79,7 @@ class Board:
         if is_white:
             return white[square]
         else:
-            return -1 * black[square]
+            return black[square]
 
     def knight_value(self, square, is_white):
         white = [ -50,-40,-30,-30,-30,-30,-40,-50, 
@@ -103,7 +103,7 @@ class Board:
         if is_white:
             return white[square]
         else:
-            return -1 * -1 * black[square]
+            return black[square]
 
     def bishop_value(self, square, is_white):
         white = [ -20,-10,-10,-10,-10,-10,-10,-20,
@@ -127,7 +127,7 @@ class Board:
         if is_white:
             return white[square]
         else:
-            return -1 * black[square]
+            return black[square]
 
     def rook_value(self, square, is_white):
         white = [ 0,  0,  0,  5,  5,  0,  0,  0,
@@ -151,7 +151,7 @@ class Board:
         if is_white:
             return white[square]
         else:
-            return -1 * black[square]
+            return black[square]
     
     def queen_value(self, square, is_white):
         white = [ -20,-10,-10, -5, -5,-10,-10,-20,
@@ -175,7 +175,7 @@ class Board:
         if is_white:
             return white[square]
         else:
-            return -1 * black[square]
+            return black[square]
 
     def king_value(self, square, is_white):
         white = [ 20, 30, 10,  0,  0, 10, 30, 20,
@@ -199,4 +199,4 @@ class Board:
         if is_white:
             return white[square]
         else:
-            return -1 * black[square]
+            return black[square]
