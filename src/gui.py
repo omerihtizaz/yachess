@@ -1,3 +1,4 @@
+import time
 import tkinter as tk
 from PIL import ImageTk
 
@@ -44,6 +45,10 @@ class Gui(tk.Frame):
 
         # status bar
         self.statusbar = tk.Frame(self, height=32)
+
+        self.label_status = tk.Label(self.statusbar, text="", fg="black")
+        self.label_status.pack(side=tk.LEFT, expand=0, in_=self.statusbar)
+
         self.statusbar.pack(expand=False, fill='x', side='bottom')
 
     def click(self, event):
@@ -96,9 +101,17 @@ class Gui(tk.Frame):
         if move in legal_moves:
             self.board.push(chess.Move.from_uci(move))
             self.player_turns.append(False)
+
+            print(self.board)
+
+            print("\nComputer's turn. Computer is thinking...\n")
+            self.label_status[
+                "text"] = "Computer's turn. Computer is thinking..."
+
             self.root.after(100, self.parent.computer_play)
         else:
-            print("Wrong move, try again.")
+            print("Wrong move, try again.\n")
+            self.label_status["text"] = "Wrong move, try again."
 
     def refresh(self, event={}):
         if event:

@@ -4,8 +4,6 @@ class Computer:
         self.is_computer_white = not is_player_white
 
     def computer_move(self):
-        print("Computer is thinking...\n")
-
         global_score = -1e8 if self.is_computer_white else 1e8
         chosen_move = None
 

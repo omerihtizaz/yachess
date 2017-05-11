@@ -21,26 +21,27 @@ class Game:
     def start(self):
         if self.player_turns[-1]:
             print("\nYou play as white.\n")
+            self.display.label_status["text"] = "You play as white."
 
-            self.root.after(100, self.player_play)
+            self.root.after(1000, self.player_play)
         else:
             print("\nYou play as black.\n")
+            self.display.label_status["text"] = "You play as black."
 
-            self.root.after(100, self.computer_play)
+            self.root.after(1000, self.computer_play)
 
         self.board.print()
 
         self.root.mainloop()
 
     def player_play(self):
-        print("\nPlayer's turn\n")
+        print("\nPlayer's turn.\n")
+        self.display.label_status["text"] = "Player's turn."
 
         # wait as long as possible for player's input
         self.root.after(100000000, self.computer_play)
 
     def computer_play(self):
-        print("Computer's turn\n")
-
         computer.Computer(self.board, self.player_turns).computer_move()
 
         self.player_turns.append(True)
