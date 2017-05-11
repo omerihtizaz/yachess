@@ -10,23 +10,28 @@ class Gui(tk.Frame):
     selected_piece = None
     start_square = None
 
+    row_number = 8
+    column_number = 8
+    square_size = 64
+
+    row_chars = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
     white = '#F0D9B5'
     black = '#B58863'
 
-    rows = 8
-    columns = 8
-    square_size = 64
-
-    def __init__(self, parent, board):
-        self.board = board
+    def __init__(self, root, parent, board, player_turns):
+        # construction
+        self.root = root
         self.parent = parent
+        self.board = board
+        self.player_turns = player_turns
 
         # frame
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, root)
 
         # canvas
-        canvas_width = self.columns * self.square_size
-        canvas_height = self.rows * self.square_size
+        canvas_width = self.column_number * self.square_size
+        canvas_height = self.row_number * self.square_size
 
         self.canvas = tk.Canvas(
             self, width=canvas_width, height=canvas_height, background='grey')
@@ -42,23 +47,28 @@ class Gui(tk.Frame):
         self.statusbar.pack(expand=False, fill='x', side='bottom')
 
     def click(self, event):
-        column_size = row_size = event.widget.master.square_size
+        # block clicks if not in player's turn
+        if not self.player_turns[-1]:
+            return
 
+        column_size = row_size = event.widget.master.square_size
         row = int(8 - (event.y / row_size))
         column = int(event.x / column_size)
 
         position = (row, column)
         piece = self.board.piece_at(row * 8 + column)
 
-        is_same = False
+        # check if player is selecting their other piece
+        is_own = False
 
         if piece is not None and self.selected_piece is not None:
             is_piece_lower = piece.symbol().islower()
             is_selected_piece_lower = self.selected_piece.symbol().islower()
 
-            is_same = not is_piece_lower ^ is_selected_piece_lower
+            is_own = not is_piece_lower ^ is_selected_piece_lower
 
-        if self.selected_piece is None or is_same:
+        # move it or replace it
+        if self.selected_piece is None or is_own:
             self.selected_piece = piece
             self.start_square = (row, column)
         else:
@@ -73,10 +83,10 @@ class Gui(tk.Frame):
         self.draw_pieces()
 
     def move(self, dest_square):
-        rows = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-
-        move = rows[self.start_square[1]] + str(self.start_square[0] + 1)
-        move += rows[dest_square[1]] + str(dest_square[0] + 1)
+        # making move notation, such as e2e4
+        move = self.row_chars[self.start_square[1]] + str(
+            self.start_square[0] + 1)
+        move += self.row_chars[dest_square[1]] + str(dest_square[0] + 1)
 
         legal_moves = []
 
@@ -85,25 +95,24 @@ class Gui(tk.Frame):
 
         if move in legal_moves:
             self.board.push(chess.Move.from_uci(move))
+            self.player_turns.append(False)
+            self.root.after(100, self.parent.computer_play)
         else:
             print("Wrong move, try again.")
 
-        print(move)
-        print(self.board)
-
     def refresh(self, event={}):
         if event:
-            x_size = int((event.width - 1) / self.columns)
-            y_size = int((event.height - 1) / self.rows)
+            x_size = int((event.width - 1) / self.column_number)
+            y_size = int((event.height - 1) / self.row_number)
             self.square_size = min(x_size, y_size)
 
         self.canvas.delete('square')
         color = self.black
 
-        for row in range(self.rows):
+        for row in range(self.row_number):
             color = self.white if color == self.black else self.black
 
-            for col in range(self.columns):
+            for col in range(self.column_number):
                 start_column = (col * self.square_size)
                 start_row = ((7 - row) * self.square_size)
                 end_column = start_column + self.square_size
@@ -157,13 +166,3 @@ class Gui(tk.Frame):
         column_size = ((7 - row) * self.square_size) + (self.square_size // 2)
 
         self.canvas.coords(name, row_size, column_size)
-
-
-def display(board):
-    root = tk.Tk()
-    root.title('Yachess')
-
-    gui = Gui(root, board)
-    gui.pack(side='top', fill='both', expand='true', padx=4, pady=4)
-
-    root.mainloop()
