@@ -22,8 +22,9 @@ class Computer:
                 global_score = local_score
                 chosen_move = move
 
+            self.board.pop()
+
             # print(local_score, move)
-            # self.board.pop()
 
         # print()
         # print(global_score, chosen_move)
