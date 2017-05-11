@@ -1,19 +1,20 @@
 import tkinter as tk
+from PIL import ImageTk
 
 import chess
-from PIL import ImageTk
 
 
 class Gui(tk.Frame):
     pieces = {}
     icons = {}
+    selected_piece = None
+    start_square = None
 
     white = '#F0D9B5'
     black = '#B58863'
 
     rows = 8
     columns = 8
-
     square_size = 64
 
     def __init__(self, parent, board):
@@ -30,26 +31,65 @@ class Gui(tk.Frame):
         self.canvas = tk.Canvas(
             self, width=canvas_width, height=canvas_height, background='grey')
         self.canvas.pack(side='top', fill='both', anchor='c', expand=True)
+        self.canvas.bind("<Button-1>", self.click)
 
         # drawing
         self.refresh()
         self.draw_pieces()
 
         # status bar
-        self.statusbar = tk.Frame(self, height=64)
-
-        entry = tk.Entry(self.statusbar, width=10)
-        entry.pack(side=tk.BOTTOM, padx=10, pady=10)
-
-        label = tk.Label(self.statusbar, text='Your move:')
-        label.pack(side=tk.BOTTOM, padx=10, pady=10)
-
-        def ok_button():
-            print('OK')
-
-        tk.Button(self.parent, text='OK', command=ok_button).pack(side=tk.BOTTOM)
-
+        self.statusbar = tk.Frame(self, height=32)
         self.statusbar.pack(expand=False, fill='x', side='bottom')
+
+    def click(self, event):
+        column_size = row_size = event.widget.master.square_size
+
+        row = int(8 - (event.y / row_size))
+        column = int(event.x / column_size)
+
+        position = (row, column)
+        piece = self.board.piece_at(row * 8 + column)
+
+        is_same = False
+
+        if piece is not None and self.selected_piece is not None:
+            is_piece_lower = piece.symbol().islower()
+            is_selected_piece_lower = self.selected_piece.symbol().islower()
+
+            is_same = not is_piece_lower ^ is_selected_piece_lower
+
+        if self.selected_piece is None or is_same:
+            self.selected_piece = piece
+            self.start_square = (row, column)
+        else:
+            self.move(dest_square=position)
+
+            self.selected_piece = None
+            self.start_square = None
+
+            self.pieces = {}
+
+        self.refresh()
+        self.draw_pieces()
+
+    def move(self, dest_square):
+        rows = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
+        move = rows[self.start_square[1]] + str(self.start_square[0] + 1)
+        move += rows[dest_square[1]] + str(dest_square[0] + 1)
+
+        legal_moves = []
+
+        for legal_move in self.board.legal_moves():
+            legal_moves.append(str(legal_move))
+
+        if move in legal_moves:
+            self.board.push(chess.Move.from_uci(move))
+        else:
+            print("Wrong move, try again.")
+
+        print(move)
+        print(self.board)
 
     def refresh(self, event={}):
         if event:
@@ -99,9 +139,11 @@ class Gui(tk.Frame):
                     self.icons[image_name] = ImageTk.PhotoImage(
                         file=image_name, width=32, height=32)
 
-                self.add_piece(piece_name, self.icons[image_name], square // 8,
-                               square % 8)
-                self.place_piece(piece_name, square // 8, square % 8)
+                row = square // 8
+                column = square % 8
+
+                self.add_piece(piece_name, self.icons[image_name], row, column)
+                self.place_piece(piece_name, row, column)
 
     def add_piece(self, name, image, row=0, column=0):
         self.canvas.create_image(
@@ -111,9 +153,10 @@ class Gui(tk.Frame):
     def place_piece(self, name, row, column):
         self.pieces[name] = (row, column)
 
-        true_row = (column * self.square_size) + int(self.square_size / 2)
-        true_column = ((7 - row) * self.square_size) + int(self.square_size / 2)
-        self.canvas.coords(name, true_row, true_column)
+        row_size = (column * self.square_size) + (self.square_size // 2)
+        column_size = ((7 - row) * self.square_size) + (self.square_size // 2)
+
+        self.canvas.coords(name, row_size, column_size)
 
 
 def display(board):
@@ -124,7 +167,3 @@ def display(board):
     gui.pack(side='top', fill='both', expand='true', padx=4, pady=4)
 
     root.mainloop()
-
-
-BOARD = chess.Board()
-display(BOARD)
