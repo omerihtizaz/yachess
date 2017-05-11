@@ -10,8 +10,10 @@ This project is entirely for fun and learning the basics of AI such as minimax, 
    - move-ordering
    - faster move-generation
    - end-game evaluation
+ - GUI:
+   - promotion
+   - log message
  - executable program
- - GUI (?)
 
 ### License
 
