@@ -33,7 +33,7 @@ class Game:
         self.root.mainloop()
 
     def player_play(self):
-        print("Player's turn\n")
+        print("\nPlayer's turn\n")
 
         # wait as long as possible for player's input
         self.root.after(100000000, self.computer_play)
