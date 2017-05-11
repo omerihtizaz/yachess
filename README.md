@@ -15,4 +15,4 @@ This project is entirely for fun and learning the basics of AI such as minimax, 
 
 ### License
 
-GPL-3.0
+MIT
