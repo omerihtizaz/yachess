@@ -104,9 +104,9 @@ class Gui(tk.Frame):
 
             print(self.board)
 
-            print("\nComputer's turn. Computer is thinking...\n")
+            print("\nComputer's turn. The computer is thinking...\n")
             self.label_status[
-                "text"] = "Computer's turn. Computer is thinking..."
+                "text"] = "Computer's turn. The computer is thinking..."
 
             self.root.after(100, self.parent.computer_play)
         else:
