@@ -3,6 +3,7 @@ from random import choice
 import board
 import computer
 import player
+import gui
 
 
 class Game:

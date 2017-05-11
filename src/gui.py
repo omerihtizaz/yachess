@@ -1,15 +1,15 @@
-import tkinter
+import tkinter as tk
 
 import chess
 from PIL import ImageTk
 
 
-class Gui(tkinter.Frame):
+class Gui(tk.Frame):
     pieces = {}
     icons = {}
 
-    white = "#F0D9B5"
-    black = "#B58863"
+    white = '#F0D9B5'
+    black = '#B58863'
 
     rows = 8
     columns = 8
@@ -20,17 +20,36 @@ class Gui(tkinter.Frame):
         self.board = board
         self.parent = parent
 
-        tkinter.Frame.__init__(self, parent)
+        # frame
+        tk.Frame.__init__(self, parent)
 
+        # canvas
         canvas_width = self.columns * self.square_size
         canvas_height = self.rows * self.square_size
 
-        self.canvas = tkinter.Canvas(
-            self, width=canvas_width, height=canvas_height, background="grey")
-        self.canvas.pack(side="top", fill="both", anchor="c", expand=True)
+        self.canvas = tk.Canvas(
+            self, width=canvas_width, height=canvas_height, background='grey')
+        self.canvas.pack(side='top', fill='both', anchor='c', expand=True)
 
+        # drawing
         self.refresh()
         self.draw_pieces()
+
+        # status bar
+        self.statusbar = tk.Frame(self, height=64)
+
+        entry = tk.Entry(self.statusbar, width=10)
+        entry.pack(side=tk.BOTTOM, padx=10, pady=10)
+
+        label = tk.Label(self.statusbar, text='Your move:')
+        label.pack(side=tk.BOTTOM, padx=10, pady=10)
+
+        def ok_button():
+            print('OK')
+
+        tk.Button(self.parent, text='OK', command=ok_button).pack(side=tk.BOTTOM)
+
+        self.statusbar.pack(expand=False, fill='x', side='bottom')
 
     def refresh(self, event={}):
         if event:
@@ -38,7 +57,7 @@ class Gui(tkinter.Frame):
             y_size = int((event.height - 1) / self.rows)
             self.square_size = min(x_size, y_size)
 
-        self.canvas.delete("square")
+        self.canvas.delete('square')
         color = self.black
 
         for row in range(self.rows):
@@ -55,26 +74,26 @@ class Gui(tkinter.Frame):
                     start_row,
                     end_column,
                     end_row,
-                    outline="black",
+                    outline='black',
                     fill=color,
-                    tags="square")
+                    tags='square')
                 color = self.white if color == self.black else self.black
 
         for name in self.pieces:
             self.place_piece(name, self.pieces[name][0], self.pieces[name][1])
 
-        self.canvas.tag_raise("piece")
-        self.canvas.tag_lower("square")
+        self.canvas.tag_raise('piece')
+        self.canvas.tag_lower('square')
 
     def draw_pieces(self):
-        self.canvas.delete("piece")
+        self.canvas.delete('piece')
 
         for square in chess.SQUARES:
             piece = self.board.piece_at(square)
 
             if piece is not None:
-                image_name = "img/%s.png" % (piece.symbol())
-                piece_name = "%s%s" % (piece.symbol(), square)
+                image_name = 'img/%s.png' % (piece.symbol())
+                piece_name = '%s%s' % (piece.symbol(), square)
 
                 if image_name not in self.icons:
                     self.icons[image_name] = ImageTk.PhotoImage(
@@ -86,7 +105,7 @@ class Gui(tkinter.Frame):
 
     def add_piece(self, name, image, row=0, column=0):
         self.canvas.create_image(
-            0, 0, image=image, tags=(name, "piece"), anchor="c")
+            0, 0, image=image, tags=(name, 'piece'), anchor='c')
         self.place_piece(name, row, column)
 
     def place_piece(self, name, row, column):
@@ -98,11 +117,11 @@ class Gui(tkinter.Frame):
 
 
 def display(board):
-    root = tkinter.Tk()
-    root.title("Yachess")
+    root = tk.Tk()
+    root.title('Yachess')
 
     gui = Gui(root, board)
-    gui.pack(side="top", fill="both", expand="true", padx=4, pady=4)
+    gui.pack(side='top', fill='both', expand='true', padx=4, pady=4)
 
     root.mainloop()
 
