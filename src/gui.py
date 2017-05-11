@@ -1,15 +1,15 @@
 import tkinter
-from PIL import ImageTk
 
 import chess
+from PIL import ImageTk
 
 
 class Gui(tkinter.Frame):
     pieces = {}
     icons = {}
 
-    white = "white"
-    black = "grey"
+    white = "#F0D9B5"
+    black = "#B58863"
 
     rows = 8
     columns = 8
@@ -28,6 +28,43 @@ class Gui(tkinter.Frame):
         self.canvas = tkinter.Canvas(
             self, width=canvas_width, height=canvas_height, background="grey")
         self.canvas.pack(side="top", fill="both", anchor="c", expand=True)
+
+        self.refresh()
+        self.draw_pieces()
+
+    def refresh(self, event={}):
+        if event:
+            x_size = int((event.width - 1) / self.columns)
+            y_size = int((event.height - 1) / self.rows)
+            self.square_size = min(x_size, y_size)
+
+        self.canvas.delete("square")
+        color = self.black
+
+        for row in range(self.rows):
+            color = self.white if color == self.black else self.black
+
+            for col in range(self.columns):
+                start_column = (col * self.square_size)
+                start_row = ((7 - row) * self.square_size)
+                end_column = start_column + self.square_size
+                end_row = start_row + self.square_size
+
+                self.canvas.create_rectangle(
+                    start_column,
+                    start_row,
+                    end_column,
+                    end_row,
+                    outline="black",
+                    fill=color,
+                    tags="square")
+                color = self.white if color == self.black else self.black
+
+        for name in self.pieces:
+            self.place_piece(name, self.pieces[name][0], self.pieces[name][1])
+
+        self.canvas.tag_raise("piece")
+        self.canvas.tag_lower("square")
 
     def draw_pieces(self):
         self.canvas.delete("piece")
@@ -66,7 +103,6 @@ def display(board):
 
     gui = Gui(root, board)
     gui.pack(side="top", fill="both", expand="true", padx=4, pady=4)
-    gui.draw_pieces()
 
     root.mainloop()
 
