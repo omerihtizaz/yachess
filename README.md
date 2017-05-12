@@ -25,6 +25,7 @@ However, a simple executable file to run Yachess is to be expected in the near f
    - log message &#10003;
    - promotion
    - moves highlight &#10003;
+   - win condition
  - executable program
 
 ### License
