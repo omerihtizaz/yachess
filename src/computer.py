@@ -31,7 +31,6 @@ class Computer:
         print()
 
         self.board.push(chosen_move)
-        self.board.print()
 
     def minimax(self, depth, is_maximising_white, alpha, beta):
         if depth == 0:

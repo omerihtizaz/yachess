@@ -23,9 +23,6 @@ class Board:
     def piece_at(self, square):
         return self.board.piece_at(square)
 
-    def print(self):
-        print(self.board)
-
     def evaluate_board(self):
         score = 0
 

@@ -19,15 +19,11 @@ class Game:
             side='top', fill='both', expand='true', padx=4, pady=4)
 
     def start(self):
-        self.board.print()
-
         if self.player_turns[-1]:
-            print("\nYou play as white.\n")
             self.display.label_status["text"] = "You play as white."
 
             self.root.after(1000, self.player_play)
         else:
-            print("\nYou play as black. The computer is thinking...\n")
             self.display.label_status[
                 "text"] = "You play as black. The computer is thinking..."
 
@@ -36,7 +32,6 @@ class Game:
         self.root.mainloop()
 
     def player_play(self):
-        print("\nPlayer's turn.\n")
         self.display.label_status["text"] = "Player's turn."
 
         # wait as long as possible for player's input

@@ -106,15 +106,11 @@ class Gui(tk.Frame):
             self.board.push(chess.Move.from_uci(move))
             self.player_turns.append(False)
 
-            print(self.board)
-
-            print("\nComputer's turn. The computer is thinking...\n")
             self.label_status[
                 "text"] = "Computer's turn. The computer is thinking..."
 
             self.root.after(100, self.parent.computer_play)
         else:
-            print("Wrong move, try again.\n")
             self.label_status["text"] = "Wrong move, try again."
 
     def highlight(self):
