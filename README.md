@@ -23,7 +23,7 @@ However, a simple executable file to run Yachess is to be expected in the near f
    - end-game evaluation
  - GUI:
    - log message &#10003;
-   - promotion
+   - promotion &#10003;
    - moves highlight
  - executable program
 
