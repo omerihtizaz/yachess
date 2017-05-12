@@ -22,11 +22,11 @@ class Computer:
 
             self.board.pop()
 
-            # print(local_score, move)
+            print(local_score, move)
 
-        # print()
-        # print(global_score, chosen_move)
-        # print()
+        print()
+        print(global_score, chosen_move)
+        print()
 
         self.board.push(chosen_move)
         self.board.print()

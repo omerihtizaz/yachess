@@ -1,8 +1,7 @@
-import time
 import tkinter as tk
+from PIL import ImageTk
 
 import chess
-from PIL import ImageTk
 
 
 class Gui(tk.Frame):
@@ -20,7 +19,7 @@ class Gui(tk.Frame):
 
     white = '#F0D9B5'
     black = '#B58863'
-    yellow = '#FBC02D'
+    yellow = '#CED26B'
 
     def __init__(self, root, parent, board, player_turns):
         # construction
@@ -131,9 +130,9 @@ class Gui(tk.Frame):
 
         for legal_move in legal_moves:
             if selected_square in legal_move[:2]:
-                self.highlighted_pieces.append((int(legal_move[-1]) - 1, self.row_chars.index(legal_move[2])))
-
-        print(self.highlighted_pieces)
+                self.highlighted_pieces.append(
+                    (int(legal_move[-1]) - 1,
+                     self.row_chars.index(legal_move[2])))
 
     def refresh(self, event={}):
         if event:
@@ -153,11 +152,7 @@ class Gui(tk.Frame):
                 end_column = start_column + self.square_size
                 end_row = start_row + self.square_size
 
-                print((row, col))
-
                 if (row, col) in self.highlighted_pieces:
-                    print("lol")
-
                     self.canvas.create_rectangle(
                         start_column,
                         start_row,
