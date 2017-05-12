@@ -1,5 +1,5 @@
 import tkinter as tk
-from PIL import ImageTk
+from PIL import Image, ImageTk
 
 import chess
 
@@ -190,8 +190,8 @@ class Gui(tk.Frame):
                 piece_name = '%s%s' % (piece.symbol(), square)
 
                 if image_name not in self.icons:
-                    self.icons[image_name] = ImageTk.PhotoImage(
-                        file=image_name, width=32, height=32)
+                    image = Image.open(image_name).resize((64, 64))
+                    self.icons[image_name] = ImageTk.PhotoImage(image)
 
                 row = square // 8
                 column = square % 8
