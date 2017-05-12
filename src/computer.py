@@ -2,11 +2,14 @@ import pickle
 
 class Computer:
     depth = 3
-    board_caches = {}
+    board_caches = None
 
     def __init__(self, board, is_player_white):
         self.board = board
         self.is_computer_white = not is_player_white
+
+        with open('data/cache.txt', 'rb') as cache:
+            self.board_caches = pickle.load(cache)
 
     def computer_move(self):
         global_score = -1e8 if self.is_computer_white else 1e8
@@ -34,6 +37,9 @@ class Computer:
         print(global_score, chosen_move)
 
         self.board.push(chosen_move)
+
+        with open('data/cache.txt', 'wb') as cache:
+            pickle.dump(self.board_caches, cache)
 
     def minimax(self, depth, is_maximising_white, alpha, beta):
         if depth == 0:
