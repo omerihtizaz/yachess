@@ -1,14 +1,24 @@
 import pickle
 
+
 class Computer:
     depth = 3
-    board_caches = None
+    board_caches = {}
+
+    cached = 0
+    not_cached = 0
+    test = 0
 
     def __init__(self, board, is_player_white):
         self.board = board
         self.is_computer_white = not is_player_white
 
-        with open('data/cache.p', 'rb') as cache:
+        try:
+            cache = open('data/cache.p', 'rb')
+        except IOError:
+            cache = open('data/cache.p', 'wb')
+            pickle.dump(self.board_caches, cache)
+        else:
             self.board_caches = pickle.load(cache)
 
     def computer_move(self):
@@ -36,6 +46,12 @@ class Computer:
         print()
         print(global_score, chosen_move)
 
+        print()
+        print('cached: ', self.cached)
+        print('not cached: ', self.not_cached)
+        print('test: ', self.test)
+        print(self.cached / (self.cached + self.not_cached) * 100, '%\n')
+
         self.board.push(chosen_move)
 
         with open('data/cache.p', 'wb') as cache:
@@ -51,9 +67,13 @@ class Computer:
 
         # if board in cache, hashing board condition
         if self.hash_board(is_maximising_white) in self.board_caches:
+            self.cached += 1
+
             return self.board_caches[self.hash_board(is_maximising_white)]
 
         # else
+        self.not_cached += 1
+
         best_score = -1e8 if is_maximising_white else 1e8
 
         for move in self.board.legal_moves():
@@ -69,6 +89,7 @@ class Computer:
                 beta = min(beta, best_score)
 
             self.board_caches[self.hash_board(is_maximising_white)] = best_score
+            self.test += 1
 
             self.board.pop()
 
