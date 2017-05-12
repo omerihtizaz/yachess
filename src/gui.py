@@ -158,7 +158,7 @@ class Gui(tk.Frame):
                         start_row,
                         end_column,
                         end_row,
-                        outline='black',
+                        outline='',
                         fill=self.yellow,
                         tags='square')
                 else:
@@ -167,7 +167,7 @@ class Gui(tk.Frame):
                         start_row,
                         end_column,
                         end_row,
-                        outline='black',
+                        outline='',
                         fill=color,
                         tags='square')
 
