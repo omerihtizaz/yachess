@@ -7,10 +7,10 @@ Yachess is a simple chess game with AI inspired by this Medium article: [A step-
 This project is entirely for fun and learning the basics of AI such as minimax, alpha-beta pruning, etc.
 
 ### How to
-To play, simply do the following from project root, assuming Python 3 is already installed:
+To play, simply do the following from project root, assuming python3 and pip3 is already installed:
 1. `git clone https://github.com/devinalvaro/yachess`
 2. `cd yachess`
-3. `make`
+3. `make` (install python-chess from pip3)
 4. `python3 src/game.py`
 
 However, a simple executable file to run Yachess is to be expected in the near future.
