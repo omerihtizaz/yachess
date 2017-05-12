@@ -9,6 +9,7 @@ import gui
 class Game:
     board = board.Board()
     player_turns = [choice([True, False])]
+    is_player_white = player_turns[-1]
 
     root = tk.Tk()
     root.title('Yachess')
@@ -38,7 +39,7 @@ class Game:
         self.root.after(100000000, self.computer_play)
 
     def computer_play(self):
-        computer.Computer(self.board, self.player_turns).computer_move()
+        computer.Computer(self.board, self.is_player_white).computer_move()
 
         self.player_turns.append(True)
 

@@ -9,8 +9,6 @@ class Computer:
         global_score = -1e8 if self.is_computer_white else 1e8
         chosen_move = None
 
-        print()
-
         for move in self.board.legal_moves():
             self.board.push(move)
 
