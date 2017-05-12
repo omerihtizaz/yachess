@@ -8,7 +8,7 @@ class Computer:
         self.board = board
         self.is_computer_white = not is_player_white
 
-        with open('data/cache.txt', 'rb') as cache:
+        with open('data/cache.p', 'rb') as cache:
             self.board_caches = pickle.load(cache)
 
     def computer_move(self):
@@ -38,7 +38,7 @@ class Computer:
 
         self.board.push(chosen_move)
 
-        with open('data/cache.txt', 'wb') as cache:
+        with open('data/cache.p', 'wb') as cache:
             pickle.dump(self.board_caches, cache)
 
     def minimax(self, depth, is_maximising_white, alpha, beta):
