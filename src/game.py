@@ -7,13 +7,13 @@ import gui
 
 
 class Game:
+    board = board.Board()
+    player_turns = [choice([True, False])]
+
+    root = tk.Tk()
+    root.title('Yachess')
+
     def __init__(self):
-        self.board = board.Board()
-        self.player_turns = [choice([True, False])]
-
-        self.root = tk.Tk()
-        self.root.title('Yachess')
-
         self.display = gui.Gui(self.root, self, self.board, self.player_turns)
         self.display.pack(
             side='top', fill='both', expand='true', padx=4, pady=4)

@@ -9,10 +9,13 @@ class Computer:
         global_score = -1e8 if self.is_computer_white else 1e8
         chosen_move = None
 
+        print()
+
         for move in self.board.legal_moves():
             self.board.push(move)
 
-            local_score = self.minimax(self.depth, self.is_computer_white, -1e8, 1e8)
+            local_score = self.minimax(self.depth, self.is_computer_white, -1e8,
+                                       1e8)
 
             if self.is_computer_white and local_score > global_score:
                 global_score = local_score
@@ -28,7 +31,6 @@ class Computer:
 
         print()
         print(global_score, chosen_move)
-        print()
 
         self.board.push(chosen_move)
 
@@ -36,6 +38,7 @@ class Computer:
         if depth == 0:
             return self.board.evaluate_board()
 
+        # if won or lost or drew
         if not self.board.legal_moves():
             return 1e8 if is_maximising_white else -1e8
 

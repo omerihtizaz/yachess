@@ -38,7 +38,8 @@ class Board:
 def piece_value(piece, square):
     symbol = piece.symbol()
     is_white = not symbol.islower()
-    score = 1
+
+    score = 0
 
     if symbol.lower() == 'p':
         score = 100 + (pawn_value(square, is_white))
@@ -53,7 +54,7 @@ def piece_value(piece, square):
     elif symbol.lower() == 'k':
         score = 1000000 + (king_value(square, is_white))
 
-    if symbol.islower():
+    if not is_white:
         score *= -1
 
     return score
