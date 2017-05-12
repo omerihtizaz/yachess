@@ -1,5 +1,8 @@
+import pickle
+
 class Computer:
     depth = 3
+    board_caches = {}
 
     def __init__(self, board, is_player_white):
         self.board = board
@@ -40,6 +43,11 @@ class Computer:
         if not self.board.legal_moves():
             return 1e8 if is_maximising_white else -1e8
 
+        # if board in cache, hashing board condition
+        if self.hash_board(is_maximising_white) in self.board_caches:
+            return self.board_caches[self.hash_board(is_maximising_white)]
+
+        # else
         best_score = -1e8 if is_maximising_white else 1e8
 
         for move in self.board.legal_moves():
@@ -54,9 +62,14 @@ class Computer:
                                  self.minimax(depth - 1, True, alpha, beta))
                 beta = min(beta, best_score)
 
+            self.board_caches[self.hash_board(is_maximising_white)] = best_score
+
             self.board.pop()
 
             if beta <= alpha:
                 break
 
         return best_score
+
+    def hash_board(self, is_maximising_white):
+        return self.board.to_string() + str(is_maximising_white)

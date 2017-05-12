@@ -20,6 +20,9 @@ class Board:
     def san(self, move):
         self.board.san(move)
 
+    def to_string(self):
+        return str(self.board)
+
     def piece_at(self, square):
         return self.board.piece_at(square)
 
