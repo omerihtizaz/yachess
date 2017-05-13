@@ -43,19 +43,19 @@ class Computer:
 
             print(local_score, move)
 
-        print()
-        print(global_score, chosen_move)
+        print('\n' + str(global_score) + str(chosen_move))
 
-        print()
-        print('cached: ', self.cached)
-        print('not cached: ', self.not_cached)
-        print('test: ', self.test)
-        print(self.cached / (self.cached + self.not_cached) * 100, '%\n')
+        print('\ncached: ' + str(self.cached))
+        print('not cached: ' + str(self.not_cached))
+        print('test: ' + str(self.test))
+        print((self.cached / (self.cached + self.not_cached)) * 100, '%\n')
 
         self.board.push(chosen_move)
 
         with open('data/cache.p', 'wb') as cache:
             pickle.dump(self.board_caches, cache)
+
+            print("dumped\n")
 
     def minimax(self, depth, is_maximising_white, alpha, beta):
         if depth == 0:
@@ -99,4 +99,4 @@ class Computer:
         return best_score
 
     def hash_board(self, is_maximising_white):
-        return self.board.to_string() + str(is_maximising_white)
+        return self.board.to_string() + ' ' + str(is_maximising_white)

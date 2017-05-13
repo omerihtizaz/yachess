@@ -48,17 +48,17 @@ def piece_value(piece, square):
     score = 0
 
     if symbol.lower() == 'p':
-        score = 100 + pawn_table[row][column]
+        score = 1000 + pawn_table[row][column]
     elif symbol.lower() == 'n':
-        score = 300 + knight_table[row][column]
+        score = 3000 + knight_table[row][column]
     elif symbol.lower() == 'b':
-        score = 300 + bishop_table[row][column]
+        score = 3000 + bishop_table[row][column]
     elif symbol.lower() == 'r':
-        score = 500 + rook_table[row][column]
+        score = 5000 + rook_table[row][column]
     elif symbol.lower() == 'q':
-        score = 900 + queen_table[row][column]
+        score = 9000 + queen_table[row][column]
     elif symbol.lower() == 'k':
-        score = 10000 + king_table[row][column]
+        score = 1000000 + king_table[row][column]
 
     if not is_white:
         score *= -1
