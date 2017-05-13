@@ -3,23 +3,21 @@ import pickle
 
 class Computer:
     depth = 3
-    board_caches = {}
 
     cached = 0
     not_cached = 0
-    test = 0
+
+    try:
+        cache = open('data/cache.p', 'rb')
+    except IOError:
+        cache = open('data/cache.p', 'wb')
+        pickle.dump({}, cache)
+    else:
+        board_caches = pickle.load(cache)
 
     def __init__(self, board, is_player_white):
         self.board = board
         self.is_computer_white = not is_player_white
-
-        try:
-            cache = open('data/cache.p', 'rb')
-        except IOError:
-            cache = open('data/cache.p', 'wb')
-            pickle.dump(self.board_caches, cache)
-        else:
-            self.board_caches = pickle.load(cache)
 
     def computer_move(self):
         global_score = -1e8 if self.is_computer_white else 1e8
@@ -31,11 +29,8 @@ class Computer:
             local_score = self.minimax(self.depth, self.is_computer_white, -1e8,
                                        1e8)
 
-            if self.is_computer_white and local_score > global_score:
-                global_score = local_score
-                chosen_move = move
-
-            if not self.is_computer_white and local_score < global_score:
+            if (self.is_computer_white and local_score > global_score) or (
+                    not self.is_computer_white and local_score < global_score):
                 global_score = local_score
                 chosen_move = move
 
@@ -47,15 +42,12 @@ class Computer:
 
         print('\ncached: ' + str(self.cached))
         print('not cached: ' + str(self.not_cached))
-        print('test: ' + str(self.test))
         print((self.cached / (self.cached + self.not_cached)) * 100, '%\n')
 
         self.board.push(chosen_move)
 
         with open('data/cache.p', 'wb') as cache:
             pickle.dump(self.board_caches, cache)
-
-            print("dumped\n")
 
     def minimax(self, depth, is_maximising_white, alpha, beta):
         if depth == 0:
@@ -89,7 +81,6 @@ class Computer:
                 beta = min(beta, best_score)
 
             self.board_caches[self.hash_board(is_maximising_white)] = best_score
-            self.test += 1
 
             self.board.pop()
 
