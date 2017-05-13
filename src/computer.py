@@ -7,11 +7,13 @@ class Computer:
     cached = 0
     not_cached = 0
 
+    board_caches = {}
+
     try:
         cache = open('data/cache.p', 'rb')
     except IOError:
         cache = open('data/cache.p', 'wb')
-        pickle.dump({}, cache)
+        pickle.dump(board_caches, cache)
     else:
         board_caches = pickle.load(cache)
 
@@ -38,7 +40,7 @@ class Computer:
 
             print(local_score, move)
 
-        print('\n' + str(global_score) + str(chosen_move))
+        print('\n' + str(global_score) + ' ' + str(chosen_move))
 
         print('\ncached: ' + str(self.cached))
         print('not cached: ' + str(self.not_cached))
@@ -51,17 +53,27 @@ class Computer:
 
     def minimax(self, depth, is_maximising_white, alpha, beta):
         if depth == 0:
-            return self.board.evaluate_board()
+            self.board_caches[self.hash_board(
+                depth, is_maximising_white)] = self.board.evaluate_board()
+
+            return self.board_caches[self.hash_board(depth,
+                                                     is_maximising_white)]
 
         # if won or lost or drew
         if not self.board.legal_moves():
-            return 1e8 if is_maximising_white else -1e8
+            self.board_caches[self.hash_board(
+                depth,
+                is_maximising_white)] = 1e8 if is_maximising_white else -1e8
 
-        # if board in cache, hashing board condition
-        if self.hash_board(is_maximising_white) in self.board_caches:
+            return self.board_caches[self.hash_board(depth,
+                                                     is_maximising_white)]
+
+        # if board in cache
+        if self.hash_board(depth, is_maximising_white) in self.board_caches:
             self.cached += 1
 
-            return self.board_caches[self.hash_board(is_maximising_white)]
+            return self.board_caches[self.hash_board(depth,
+                                                     is_maximising_white)]
 
         # else
         self.not_cached += 1
@@ -80,14 +92,19 @@ class Computer:
                                  self.minimax(depth - 1, True, alpha, beta))
                 beta = min(beta, best_score)
 
-            self.board_caches[self.hash_board(is_maximising_white)] = best_score
+            self.board_caches[self.hash_board(depth,
+                                              is_maximising_white)] = best_score
 
             self.board.pop()
 
             if beta <= alpha:
                 break
 
-        return best_score
+        self.board_caches[self.hash_board(depth,
+                                          is_maximising_white)] = best_score
 
-    def hash_board(self, is_maximising_white):
-        return self.board.to_string() + ' ' + str(is_maximising_white)
+        return self.board_caches[self.hash_board(depth, is_maximising_white)]
+
+    def hash_board(self, depth, is_maximising_white):
+        return self.board.to_string() + ' ' + str(depth) + ' ' + str(
+            is_maximising_white)
