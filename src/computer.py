@@ -4,8 +4,8 @@ import pickle
 class Computer:
     depth = 3
 
-    cached = 0
-    not_cached = 0
+    cache_hit = 0
+    cache_miss = 0
 
     board_caches = {}
 
@@ -42,9 +42,9 @@ class Computer:
 
         print('\n' + str(global_score) + ' ' + str(chosen_move))
 
-        print('\ncached: ' + str(self.cached))
-        print('not cached: ' + str(self.not_cached))
-        print((self.cached / (self.cached + self.not_cached)) * 100, '%\n')
+        print('\ncache_hit: ' + str(self.cache_hit))
+        print('cache_hit: ' + str(self.cache_miss))
+        print('hit rate: ' + str(self.cache_hit / (self.cache_hit + self.cache_miss) * 100) + '%\n')
 
         self.board.push(chosen_move)
 
@@ -70,13 +70,13 @@ class Computer:
 
         # if board in cache
         if self.hash_board(depth, is_maximising_white) in self.board_caches:
-            self.cached += 1
+            self.cache_hit += 1
 
             return self.board_caches[self.hash_board(depth,
                                                      is_maximising_white)]
 
         # else
-        self.not_cached += 1
+        self.cache_miss += 1
 
         best_score = -1e8 if is_maximising_white else 1e8
 
