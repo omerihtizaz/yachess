@@ -16,7 +16,7 @@ This project is entirely for fun and learning the basics of AI such as minimax, 
 2. pip3
 
    https://pip.pypa.io/en/stable/installing/
-   
+
 3. tkinter
 
    https://tkinter.unpythonic.net/wiki/How_to_install_Tkinter
@@ -39,7 +39,7 @@ To play, simply do the following from project root, assuming python3, pip3, and 
    - state-caching &#10003;
  - GUI:
    - log message &#10003;
-   - promotion &#10003; (automatically to Queen only)
+   - promotion &#10003;
    - move highlight &#10003;
    - win condition &#10003;
 
