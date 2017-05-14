@@ -39,7 +39,7 @@ To play, simply do the following from project root, assuming python3, pip3, and 
    - state-caching &#10003;
  - GUI:
    - log message &#10003;
-   - promotion
+   - promotion &#10003; (automatically to Queen only)
    - move highlight &#10003;
    - win condition &#10003;
 

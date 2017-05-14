@@ -116,6 +116,19 @@ class Gui(tk.Frame):
                     "text"] = "Computer's turn. The computer is thinking..."
 
                 self.root.after(100, self.parent.computer_play)
+        elif move + 'q' in legal_moves:
+            self.board.push(chess.Move.from_uci(move + 'q'))
+            self.player_turns.append(False)
+
+            if self.board.is_checkmate():
+                self.label_status["text"] = "Checkmate."
+            elif self.board.is_stalemate():
+                self.label_status["text"] = "It was a draw."
+            else:
+                self.label_status[
+                    "text"] = "Computer's turn. The computer is thinking..."
+
+                self.root.after(100, self.parent.computer_play)
         else:
             self.label_status["text"] = "Wrong move, try again."
 
