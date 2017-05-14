@@ -19,7 +19,8 @@ class Gui(tk.Frame):
 
     white = '#F0D9B5'
     black = '#B58863'
-    yellow = '#CED26B'
+    yellow = '#AEB188'
+    green = '#646D40'
 
     def __init__(self, root, parent, board, player_turns):
         # construction
@@ -156,6 +157,15 @@ class Gui(tk.Frame):
                         end_row,
                         outline='',
                         fill=self.yellow,
+                        tags='square')
+                elif (row, col) == self.start_square:
+                    self.canvas.create_rectangle(
+                        start_column,
+                        start_row,
+                        end_column,
+                        end_row,
+                        outline='',
+                        fill=self.green,
                         tags='square')
                 else:
                     self.canvas.create_rectangle(
