@@ -1,26 +1,27 @@
-import tkinter as tk
+import tkinter
 from PIL import Image, ImageTk
 
 import chess
 
+ROW_NUMBER = 8
+COLUMN_NUMBER = 8
 
-class Gui(tk.Frame):
+ROW_CHARS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
+WHITE = '#F0D9B5'
+BLACK = '#B58863'
+YELLOW = '#AEB188'
+GREEN = '#646D40'
+
+
+class GUI(tkinter.Frame):
+    square_size = 64
+
     pieces = {}
     icons = {}
     selected_piece = None
     start_square = None
     highlighted_pieces = []
-
-    row_number = 8
-    column_number = 8
-    square_size = 64
-
-    row_chars = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-
-    white = '#F0D9B5'
-    black = '#B58863'
-    yellow = '#AEB188'
-    green = '#646D40'
 
     def __init__(self, root, parent, board, player_turns):
         # construction
@@ -30,44 +31,40 @@ class Gui(tk.Frame):
         self.player_turns = player_turns
 
         # frame
-        tk.Frame.__init__(self, root)
+        tkinter.Frame.__init__(self, root)
 
         # canvas
-        canvas_width = self.column_number * self.square_size
-        canvas_height = self.row_number * self.square_size
+        canvas_width = COLUMN_NUMBER * self.square_size
+        canvas_height = ROW_NUMBER * self.square_size
 
-        self.canvas = tk.Canvas(
+        self.canvas = tkinter.Canvas(
             self, width=canvas_width, height=canvas_height, background='grey')
         self.canvas.pack(side='top', fill='both', anchor='c', expand=True)
-        self.canvas.bind("<Button-1>", self.click)
+        self.canvas.bind('<Button-1>', self.click)
 
         # drawing
         self.refresh()
         self.draw_pieces()
 
         # status bar
-        self.statusbar = tk.Frame(self, height=32)
-
-        self.label_status = tk.Label(self.statusbar, text="", fg="black")
-        self.label_status.pack(side=tk.LEFT, expand=0, in_=self.statusbar)
-
+        self.statusbar = tkinter.Frame(self, height=32)
+        self.label_status = tkinter.Label(self.statusbar, text='', fg='black')
+        self.label_status.pack(side=tkinter.LEFT, expand=0, in_=self.statusbar)
         self.statusbar.pack(expand=False, fill='x', side='bottom')
 
     def click(self, event):
         # block clicks if not in player's turn
         if not self.player_turns[-1]:
-            return
+            return None
 
         column_size = row_size = event.widget.master.square_size
         row = int(8 - (event.y / row_size))
         column = int(event.x / column_size)
-
         position = (row, column)
-        piece = self.board.piece_at(row * 8 + column)
 
         # check if player is selecting their other piece
+        piece = self.board.piece_at(row * 8 + column)
         is_own = False
-
         if piece is not None and self.selected_piece is not None:
             is_piece_lower = piece.symbol().islower()
             is_selected_piece_lower = self.selected_piece.symbol().islower()
@@ -94,74 +91,59 @@ class Gui(tk.Frame):
 
     def move(self, dest_square):
         # making move notation, such as e2e4
-        move = self.row_chars[self.start_square[1]] + str(
-            self.start_square[0] + 1)
-        move += self.row_chars[dest_square[1]] + str(dest_square[0] + 1)
+        move = ROW_CHARS[self.start_square[1]] + str(self.start_square[0] + 1)
+        move += ROW_CHARS[dest_square[1]] + str(dest_square[0] + 1)
 
         legal_moves = []
-
-        for legal_move in self.board.legal_moves():
+        for legal_move in self.board.legal_moves:
             legal_moves.append(str(legal_move))
+
+        # handle pawn promotion
+        if move + 'q' in legal_moves:
+            move += 'q'
 
         if move in legal_moves:
             self.board.push(chess.Move.from_uci(move))
             self.player_turns.append(False)
-
             if self.board.is_checkmate():
-                self.label_status["text"] = "Checkmate."
+                self.label_status['text'] = "Checkmate."
             elif self.board.is_stalemate():
-                self.label_status["text"] = "It was a draw."
+                self.label_status['text'] = "It was a draw."
             else:
                 self.label_status[
-                    "text"] = "Computer's turn. The computer is thinking..."
-
-                self.root.after(100, self.parent.computer_play)
-        elif move + 'q' in legal_moves:
-            self.board.push(chess.Move.from_uci(move + 'q'))
-            self.player_turns.append(False)
-
-            if self.board.is_checkmate():
-                self.label_status["text"] = "Checkmate."
-            elif self.board.is_stalemate():
-                self.label_status["text"] = "It was a draw."
-            else:
-                self.label_status[
-                    "text"] = "Computer's turn. The computer is thinking..."
+                    'text'] = "Computer's turn. The computer is thinking..."
 
                 self.root.after(100, self.parent.computer_play)
         else:
-            self.label_status["text"] = "Wrong move, try again."
+            self.label_status['text'] = "Wrong move, try again."
 
     def highlight(self):
         self.highlighted_pieces = []
 
         legal_moves = []
-
-        for legal_move in self.board.legal_moves():
+        for legal_move in self.board.legal_moves:
             legal_moves.append(str(legal_move))
 
-        selected_square = self.row_chars[self.start_square[1]] + str(
+        selected_square = ROW_CHARS[self.start_square[1]] + str(
             self.start_square[0] + 1)
-
         for legal_move in legal_moves:
             if selected_square in legal_move[:2]:
-                self.highlighted_pieces.append(
-                    (int(legal_move[-1]) - 1,
-                     self.row_chars.index(legal_move[2])))
+                self.highlighted_pieces.append((int(legal_move[-1]) - 1,
+                                                ROW_CHARS.index(legal_move[2])))
 
     def refresh(self, event={}):
         if event:
-            x_size = int((event.width - 1) / self.column_number)
-            y_size = int((event.height - 1) / self.row_number)
+            x_size = int((event.width - 1) / COLUMN_NUMBER)
+            y_size = int((event.height - 1) / ROW_NUMBER)
             self.square_size = min(x_size, y_size)
 
         self.canvas.delete('square')
-        color = self.black
+        color = BLACK
 
-        for row in range(self.row_number):
-            color = self.white if color == self.black else self.black
+        for row in range(ROW_NUMBER):
+            color = WHITE if color == BLACK else BLACK
 
-            for col in range(self.column_number):
+            for col in range(COLUMN_NUMBER):
                 start_column = (col * self.square_size)
                 start_row = ((7 - row) * self.square_size)
                 end_column = start_column + self.square_size
@@ -174,7 +156,7 @@ class Gui(tk.Frame):
                         end_column,
                         end_row,
                         outline='',
-                        fill=self.yellow,
+                        fill=YELLOW,
                         tags='square')
                 elif (row, col) == self.start_square:
                     self.canvas.create_rectangle(
@@ -183,7 +165,7 @@ class Gui(tk.Frame):
                         end_column,
                         end_row,
                         outline='',
-                        fill=self.green,
+                        fill=GREEN,
                         tags='square')
                 else:
                     self.canvas.create_rectangle(
@@ -195,7 +177,7 @@ class Gui(tk.Frame):
                         fill=color,
                         tags='square')
 
-                color = self.white if color == self.black else self.black
+                color = WHITE if color == BLACK else BLACK
 
         for name in self.pieces:
             self.place_piece(name, self.pieces[name][0], self.pieces[name][1])

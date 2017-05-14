@@ -1,21 +1,23 @@
-import tkinter as tk
+from tkinter import Tk
 from random import choice
 
-import board
-import computer
+import chess
+
+import ai
 import gui
 
 
 class Game:
-    board = board.Board()
+    board = chess.Board()
+
     player_turns = [choice([True, False])]
     is_player_white = player_turns[-1]
 
-    root = tk.Tk()
+    root = Tk()
     root.title('Yachess')
 
     def __init__(self):
-        self.display = gui.Gui(self.root, self, self.board, self.player_turns)
+        self.display = gui.GUI(self.root, self, self.board, self.player_turns)
         self.display.pack(
             side='top', fill='both', expand='true', padx=4, pady=4)
 
@@ -39,13 +41,12 @@ class Game:
         self.root.after(100000000, self.computer_play)
 
     def computer_play(self):
-        computer.Computer(self.board, self.is_player_white).computer_move()
-
-        self.player_turns.append(True)
+        ai.AI(self.board, self.is_player_white).ai_move()
 
         self.display.refresh()
         self.display.draw_pieces()
 
+        self.player_turns.append(True)
         if self.board.is_checkmate():
             self.display.label_status["text"] = "Checkmate."
         elif self.board.is_stalemate():
