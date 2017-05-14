@@ -20,6 +20,12 @@ class Board:
     def san(self, move):
         self.board.san(move)
 
+    def is_checkmate(self):
+        return self.board.is_checkmate()
+
+    def is_stalemate(self):
+        return self.board.is_stalemate()
+
     def to_string(self):
         return str(self.board)
 

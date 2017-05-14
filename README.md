@@ -41,7 +41,7 @@ To play, simply do the following from project root, assuming python3, pip3, and 
    - log message &#10003;
    - promotion
    - move highlight &#10003;
-   - win condition
+   - win condition &#10003;
 
 ### License
 

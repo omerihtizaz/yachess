@@ -46,7 +46,15 @@ class Game:
         self.display.refresh()
         self.display.draw_pieces()
 
-        self.root.after(100, self.player_play)
+        if self.board.is_checkmate():
+            self.display.label_status["text"] = "Checkmate."
+        elif self.board.is_stalemate():
+            self.display.label_status["text"] = "It was a draw."
+        else:
+            self.display.label_status[
+                "text"] = "Computer's turn. The computer is thinking..."
+
+            self.root.after(100, self.player_play)
 
 
 Game().start()
