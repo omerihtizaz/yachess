@@ -94,9 +94,7 @@ class GUI(tkinter.Frame):
         move = ROW_CHARS[self.start_square[1]] + str(self.start_square[0] + 1)
         move += ROW_CHARS[dest_square[1]] + str(dest_square[0] + 1)
 
-        legal_moves = []
-        for legal_move in self.board.legal_moves:
-            legal_moves.append(str(legal_move))
+        legal_moves = [str(legal_move) for legal_move in self.board.legal_moves]
 
         # handle pawn promotion
         if move + 'q' in legal_moves:
@@ -120,16 +118,15 @@ class GUI(tkinter.Frame):
     def highlight(self):
         self.highlighted_pieces = []
 
-        legal_moves = []
-        for legal_move in self.board.legal_moves:
-            legal_moves.append(str(legal_move))
+        legal_moves = [str(legal_move) for legal_move in self.board.legal_moves]
 
         selected_square = ROW_CHARS[self.start_square[1]] + str(
             self.start_square[0] + 1)
-        for legal_move in legal_moves:
-            if selected_square in legal_move[:2]:
-                self.highlighted_pieces.append((int(legal_move[-1]) - 1,
-                                                ROW_CHARS.index(legal_move[2])))
+
+        self.highlighted_pieces = [(int(legal_move[-1]) - 1,
+                                    ROW_CHARS.index(legal_move[2])) if
+                                   selected_square == legal_move[:2] else None
+                                   for legal_move in legal_moves]
 
     def refresh(self, event={}):
         if event:
