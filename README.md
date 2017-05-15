@@ -37,6 +37,7 @@ To play, simply do the following from project root, assuming python3, pip3, and 
    - faster move-generation
    - end-game evaluation
    - state-caching &#10003;
+   - opening book &#10003;
  - GUI:
    - log message &#10003;
    - promotion &#10003;
