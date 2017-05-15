@@ -32,8 +32,6 @@ class AI:
                 str(entry.move()) for entry in reader.find_all(board)
             ]
 
-        print(self.opening_moves)
-
     def ai_move(self):
         global_score = -1e8 if self.is_ai_white else 1e8
         chosen_move = None
@@ -41,7 +39,7 @@ class AI:
         # can move from opening book
         if self.opening_moves:
             chosen_move = chess.Move.from_uci(
-                self.opening_moves[randint(0, len(self.opening_moves) // 3)])
+                self.opening_moves[randint(0, len(self.opening_moves) // 2)])
         else:
             for move in self.board.legal_moves:
                 self.board.push(move)
@@ -64,7 +62,7 @@ class AI:
             print('hit rate: ' + str(self.cache_hit / (
                 self.cache_hit + self.cache_miss) * 100) + '%\n')
 
-        print('\n' + str(global_score) + ' ' + str(chosen_move) + '\n')
+        print(str(global_score) + ' ' + str(chosen_move) + '\n')
 
         self.board.push(chosen_move)
 
