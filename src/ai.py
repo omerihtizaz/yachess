@@ -46,6 +46,9 @@ class AI:
 
                 local_score = self.minimax(self.depth - 1, not self.is_ai_white,
                                            -1e8, 1e8)
+                self.board_caches[self.hash_board(
+                    self.depth - 1, not self.is_ai_white)] = local_score
+
                 if self.is_ai_white and local_score > global_score:
                     global_score = local_score
                     chosen_move = move
@@ -58,9 +61,7 @@ class AI:
                 print(local_score, move)
 
             print('\ncache_hit: ' + str(self.cache_hit))
-            print('cache_hit: ' + str(self.cache_miss))
-            print('hit rate: ' + str(self.cache_hit / (
-                self.cache_hit + self.cache_miss) * 100) + '%\n')
+            print('cache_miss: ' + str(self.cache_miss) + '\n')
 
         print(str(global_score) + ' ' + str(chosen_move) + '\n')
 
@@ -94,16 +95,17 @@ class AI:
         for move in self.board.legal_moves:
             self.board.push(move)
 
+            local_score = self.minimax(depth - 1, not is_maxing_white, alpha,
+                                       beta)
+            self.board_caches[self.hash_board(
+                depth - 1, not is_maxing_white)] = local_score
+
             if is_maxing_white:
-                best_score = max(best_score,
-                                 self.minimax(depth - 1, False, alpha, beta))
+                best_score = max(best_score, local_score)
                 alpha = max(alpha, best_score)
             else:
-                best_score = min(best_score,
-                                 self.minimax(depth - 1, True, alpha, beta))
+                best_score = min(best_score, local_score)
                 beta = min(beta, best_score)
-            self.board_caches[self.hash_board(depth,
-                                              is_maxing_white)] = best_score
 
             self.board.pop()
 
