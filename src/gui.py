@@ -155,7 +155,8 @@ class GUI(tkinter.Frame):
                         outline='',
                         fill=YELLOW,
                         tags='square')
-                elif (row, col) == self.start_square:
+                elif ((row, col) == self.start_square) and (
+                        self.selected_piece is not None):
                     self.canvas.create_rectangle(
                         start_column,
                         start_row,

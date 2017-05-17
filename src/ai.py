@@ -71,26 +71,21 @@ class AI:
             pickle.dump(self.board_caches, cache)
 
     def minimax(self, depth, is_maxing_white, alpha, beta):
-        if depth == 0:
-            self.board_caches[self.hash_board(
-                depth, is_maxing_white)] = evaluate_board(self.board)
-            return self.board_caches[self.hash_board(depth, is_maxing_white)]
-
-        # if won or lost or drew
-        if not self.board.legal_moves:
-            self.board_caches[self.hash_board(
-                depth, is_maxing_white)] = 1e8 if is_maxing_white else -1e8
-            return self.board_caches[self.hash_board(depth, is_maxing_white)]
-
         # if board in cache
         if self.hash_board(depth, is_maxing_white) in self.board_caches:
             self.cache_hit += 1
 
             return self.board_caches[self.hash_board(depth, is_maxing_white)]
 
-        # else
         self.cache_miss += 1
 
+        # if depth is 0 or game is over
+        if depth == 0 or not self.board.legal_moves:
+            self.board_caches[self.hash_board(
+                depth, is_maxing_white)] = evaluate_board(self.board)
+            return self.board_caches[self.hash_board(depth, is_maxing_white)]
+
+        # else
         best_score = -1e8 if is_maxing_white else 1e8
         for move in self.board.legal_moves:
             self.board.push(move)
