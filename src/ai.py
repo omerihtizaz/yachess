@@ -29,7 +29,7 @@ class AI:
 
         with open_reader('data/opening.bin') as reader:
             self.opening_moves = [
-                str(entry.move()) for entry in reader.find_all(board)
+                str(entry.move) for entry in reader.find_all(board)
             ]
 
     def ai_move(self):
